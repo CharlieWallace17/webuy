@@ -1,5 +1,11 @@
-import HomeScreen from './screens/HomeScreen';
+import { store } from './src/redux/store';
+import { Provider } from 'react-redux';
+import HomeScreen from './src/screens/HomeScreen';
 
 export default function App() {
-    return <HomeScreen />;
+    return (
+        <Provider store={store}>
+            <HomeScreen />
+        </Provider>
+    );
 }
