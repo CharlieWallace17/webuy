@@ -1,23 +1,55 @@
-import { useState } from 'react';
-import { StyleSheet, View, ScrollView } from 'react-native';
+import { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { StyleSheet, View, Text } from 'react-native';
 import { SearchBar } from '@rneui/themed';
 import ProductBlock from '../components/ProductBlock';
-import Constants from 'expo-constants';
+import { fetchProducts } from '../features/products/productsSlice';
 
 const HomeScreen = () => {
+    const dispatch = useDispatch();
+    useEffect(() => {
+        dispatch(fetchProducts());
+    }, [dispatch]);
+    const products = useSelector((state) => state.products);
+
     const [searchText, setSearchText] = useState('');
+
+    const [searchProducts, setSearchProducts] = useState(
+        products.productsArray
+    );
+
+    console.log('productsArray:', products.productsArray);
+    console.log('searchText:', searchText);
+    console.log('searchProducts:', searchProducts);
+
+    const updateProductsList = (search) => {
+        if (!search) {
+            setSearchProducts(products.productsArray);
+        } else {
+            setSearchProducts(
+                products.productsArray.filter((prod) =>
+                    prod.name.includes(search)
+                )
+            );
+        }
+    };
 
     return (
         <View style={styles.container}>
             <View style={styles.header}></View>
             <SearchBar
                 placeholder='Search...'
-                onChangeText={(search) => setSearchText(search)}
+                onChangeText={(search) => {
+                    setSearchText(search);
+                    updateProductsList(search);
+                }}
+                onCancel={() => setSearchProducts(products.productsArray)}
+                onClear={() => setSearchProducts(products.productsArray)}
                 value={searchText}
                 lightTheme
                 round
             />
-            <ProductBlock />
+            <ProductBlock searchProducts={searchProducts} />
         </View>
     );
 };

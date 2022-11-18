@@ -1,36 +1,8 @@
-import { useSelector, useDispatch } from 'react-redux';
-import { useEffect } from 'react';
-import { FlatList, View, Text } from 'react-native';
-import { fetchProducts } from '../features/productsSlice';
+import { FlatList } from 'react-native';
 import { Card } from '@rneui/base';
 
-const ProductBlock = () => {
-    const dispatch = useDispatch();
-
-    useEffect(() => {
-        dispatch(fetchProducts());
-    }, [dispatch]);
-
-    const products = useSelector((state) => state.products);
-
-    if (products.isLoading) {
-        return (
-            <View>
-                <Text>Loading...</Text>
-            </View>
-        );
-    }
-
-    if (products.errMess) {
-        return (
-            <View>
-                <Text>{products.errMess}</Text>
-            </View>
-        );
-    }
-
+const ProductBlock = (props) => {
     const renderProductItem = ({ item }) => {
-        console.log('The item image is:', item.image);
         return (
             <Card
                 containerStyle={{
@@ -55,7 +27,7 @@ const ProductBlock = () => {
                         marginTop: 10,
                     }}
                 >
-                    {item.product}
+                    {item.name}
                 </Card.Title>
             </Card>
         );
@@ -63,13 +35,14 @@ const ProductBlock = () => {
 
     return (
         <FlatList
-            data={products.productsArray}
+            data={props.searchProducts}
             renderItem={renderProductItem}
             keyExtractor={(item) => item.id.toString()}
             numColumns='2'
             columnWrapperStyle={{
                 justifyContent: 'space-around',
             }}
+            windowSize={10}
         />
     );
 };
