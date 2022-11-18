@@ -5,16 +5,15 @@ import ProductBlock from '../components/ProductBlock';
 import Constants from 'expo-constants';
 
 const HomeScreen = () => {
-    const [search, setSearch] = useState('');
+    const [searchText, setSearchText] = useState('');
 
     return (
         <View style={styles.container}>
             <View style={styles.header}></View>
             <SearchBar
                 placeholder='Search...'
-                onChangeText={(search) => setSearch(search)}
-                value={search}
-                style={styles.search}
+                onChangeText={(search) => setSearchText(search)}
+                value={searchText}
                 lightTheme
                 round
             />

@@ -63,7 +63,7 @@ const ProductBlock = () => {
 
     return (
         <FlatList
-            data={products.productsArray.filter((product) => product.id <= 10)}
+            data={products.productsArray}
             renderItem={renderProductItem}
             keyExtractor={(item) => item.id.toString()}
             numColumns='2'
