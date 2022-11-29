@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { SearchBar } from '@rneui/themed';
 import ProductBlock from '../components/ProductBlock';
 import { fetchProducts } from '../features/products/productsSlice';
@@ -10,7 +10,12 @@ const HomeScreen = () => {
     useEffect(() => {
         dispatch(fetchProducts());
     }, [dispatch]);
+    
     const products = useSelector((state) => state.products);
+    useEffect(() => {
+        setSearchProducts(products.productsArray);
+        console.log(products.productsArray.length);
+    }, [products]);
 
     const [searchText, setSearchText] = useState('');
 
@@ -18,18 +23,18 @@ const HomeScreen = () => {
         products.productsArray
     );
 
-    console.log('productsArray:', products.productsArray);
-    console.log('searchText:', searchText);
-    console.log('searchProducts:', searchProducts);
+    // console.log('searchText:', searchText);
+    // console.log('searchProducts:', searchProducts);
 
     const updateProductsList = (search) => {
         if (!search) {
             setSearchProducts(products.productsArray);
         } else {
             setSearchProducts(
-                products.productsArray.filter((prod) =>
-                    prod.name.includes(search)
-                )
+                products.productsArray.filter((prod) => {
+                    if (!search) return true;
+                    return prod.name.includes(search);
+                })
             );
         }
     };
